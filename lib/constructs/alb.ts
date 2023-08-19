@@ -49,17 +49,21 @@ export class Alb extends Construct {
     });
 
     const ipAddresses = [];
-    for (let i = 0; i <= 4; i++) {
+    for (let i = 0; i < 5; i++) {
       ipAddresses.push(`10.0.1.${i}/32`);
     }
 
-    listener.addTargets("Targets", {
-      priority: 1,
-      conditions: [
-        cdk.aws_elasticloadbalancingv2.ListenerCondition.sourceIps(ipAddresses),
-      ],
-      targets: [target],
-      port: 80,
-    });
+    for (let i = 0; i < 20; i++) {
+      listener.addTargets(`Targets${i}`, {
+        priority: i + 2,
+        conditions: [
+          cdk.aws_elasticloadbalancingv2.ListenerCondition.sourceIps(
+            ipAddresses
+          ),
+        ],
+        targets: [target],
+        port: 80,
+      });
+    }
   }
 }
